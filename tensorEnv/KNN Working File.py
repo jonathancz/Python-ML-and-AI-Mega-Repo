@@ -6,7 +6,7 @@ import numpy as np
 from sklearn import linear_model, preprocessing
 
 data = pd.read_csv("car.data")
-print(data.head())
+# print(data.head())
 
 # With non numerical data, we have to convert them to numerical data
 # If we examine the car data set, you can realize that most of the data
@@ -32,13 +32,29 @@ cls = le.fit_transform(list(data["class"]))
 predict = "class"
 
 # Create one big list
-x = list(zip(buying, maint, door, persons, lug_boot, safety))
+X = list(zip(buying, maint, door, persons, lug_boot, safety))
 y = list(cls)
 
 x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y, test_size=0.1)
-print(x_train, y_test)
+# print(x_train, y_test)
 
+# K Nearest Neighbor:
+# K is known as a hyper parameter. It stands for the amount of neighbors
+# that we're going to look for.
+numNeighbor = 9
+model = KNeighborsClassifier(n_neighbors = numNeighbor) # Takes in the number of neighbors; The K value
 
+model.fit(x_train, y_train)
+accuracy = model.score(x_test, y_test)
+print(accuracy)
+predicted =  model.predict(x_test)
+names = ["unacc", "acc", "good", "vgood"]
+
+for x in range(len(x_test)):
+    print("Predicted: ", names[predicted[x]], " Data: ", x_test[x], " Actual: ", names[y_test[x]])
+    # Get the distance between data points
+    n = model.kneighbors([x_test[x]], numNeighbor, True)
+    print("N: ", n)
 
 
 
