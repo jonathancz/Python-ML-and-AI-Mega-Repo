@@ -10,5 +10,22 @@ data = keras.datasets.fashion_mnist
 class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 
-train_images = train_images/255.0
+train_images = train_images/255.0xx
 test_images = test_images/255.0
+
+model = keras.Sequential([
+    keras.layers.Flatten(input_shape=(28, 28)),
+    keras.layers.Dense(128, activation="relu"),
+    keras.layers.Dense(10, activation="softmax")
+])
+
+model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+
+model.fit(train_images, train_labels, epochs=5)
+
+
+# Returns a group of predictions because it takes in a group of parameters
+# and trains all of them.
+prediction = model.predict(test_images)
+print(class_names[np.argmax(prediction[0])])
+
